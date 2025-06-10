@@ -1,5 +1,7 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
 const ErrorMessage = ({ message, onRetry, onDismiss }) => {
   return (
@@ -20,25 +22,25 @@ const ErrorMessage = ({ message, onRetry, onDismiss }) => {
         
         <div className="flex items-center gap-2">
           {onRetry && (
-            <motion.button
+            <Button
               onClick={onRetry}
               className="text-xs text-error hover:text-error/80 font-medium"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
               Retry
-            </motion.button>
+            </Button>
           )}
           
           {onDismiss && (
-            <motion.button
+            <Button
               onClick={onDismiss}
-              className="text-error hover:text-error/80"
+              className="text-error hover:text-error/80 p-0"
               whileHover={{ scale: 1.1 }}
               whileTap={{ scale: 0.9 }}
             >
               <ApperIcon name="X" className="w-4 h-4" />
-            </motion.button>
+            </Button>
           )}
         </div>
       </div>

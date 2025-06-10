@@ -1,4 +1,5 @@
-import ApperIcon from './ApperIcon';
+import React from 'react';
+import ApperIcon from '@/components/ApperIcon';
 
 const FileTypeIcon = ({ type, className = 'w-6 h-6' }) => {
   const getIconByType = (mimeType) => {

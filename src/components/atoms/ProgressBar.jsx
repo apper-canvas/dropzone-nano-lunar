@@ -1,3 +1,4 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 
 const ProgressBar = ({ progress, status }) => {
@@ -17,7 +18,6 @@ const ProgressBar = ({ progress, status }) => {
   };
 
   const getBackgroundPosition = () => {
-    // Animate gradient position based on progress for uploading state
     if (status === 'uploading') {
       return `${progress}% 50%`;
     }

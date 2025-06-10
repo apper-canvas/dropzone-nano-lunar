@@ -1,9 +1,10 @@
+import React from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import ApperIcon from './ApperIcon';
-import ProgressBar from './ProgressBar';
-import StatusIndicator from './StatusIndicator';
-import FileTypeIcon from './FileTypeIcon';
-import { fileService } from '../services';
+import ApperIcon from '@/components/ApperIcon';
+import ProgressBar from '@/components/atoms/ProgressBar';
+import StatusIndicator from '@/components/molecules/StatusIndicator';
+import FileTypeIcon from '@/components/molecules/FileTypeIcon';
+import { fileService } from '@/services';
 
 const FileCard = ({ file, onPause, onResume, onCancel, onRetry }) => {
   const formatFileSize = (bytes) => {
@@ -12,42 +13,6 @@ const FileCard = ({ file, onPause, onResume, onCancel, onRetry }) => {
     const sizes = ['Bytes', 'KB', 'MB', 'GB'];
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-  };
-
-  const getStatusColor = (status) => {
-    switch (status) {
-      case 'uploading':
-        return 'primary';
-      case 'paused':
-        return 'warning';
-      case 'completed':
-        return 'success';
-      case 'error':
-        return 'error';
-      default:
-        return 'surface-500';
-    }
-  };
-
-  const handleAction = async (action) => {
-    try {
-      switch (action) {
-        case 'pause':
-          await onPause(file.id);
-          break;
-        case 'resume':
-          await onResume(file.id);
-          break;
-        case 'cancel':
-          await onCancel(file.id);
-          break;
-        case 'retry':
-          await onRetry(file);
-          break;
-      }
-    } catch (error) {
-      console.error('Action failed:', error);
-    }
   };
 
   return (
@@ -96,7 +61,7 @@ const FileCard = ({ file, onPause, onResume, onCancel, onRetry }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    onClick={() => handleAction('pause')}
+                    onClick={() => onPause(file.id)}
                     className="p-1.5 rounded-lg hover:bg-surface-100 text-surface-600 hover:text-warning transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -111,7 +76,7 @@ const FileCard = ({ file, onPause, onResume, onCancel, onRetry }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    onClick={() => handleAction('resume')}
+                    onClick={() => onResume(file.id)}
                     className="p-1.5 rounded-lg hover:bg-surface-100 text-surface-600 hover:text-primary transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -126,7 +91,7 @@ const FileCard = ({ file, onPause, onResume, onCancel, onRetry }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    onClick={() => handleAction('retry')}
+                    onClick={() => onRetry(file)}
                     className="p-1.5 rounded-lg hover:bg-surface-100 text-surface-600 hover:text-primary transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}
@@ -141,7 +106,7 @@ const FileCard = ({ file, onPause, onResume, onCancel, onRetry }) => {
                     initial={{ opacity: 0, scale: 0.8 }}
                     animate={{ opacity: 1, scale: 1 }}
                     exit={{ opacity: 0, scale: 0.8 }}
-                    onClick={() => handleAction('cancel')}
+                    onClick={() => onCancel(file.id)}
                     className="p-1.5 rounded-lg hover:bg-surface-100 text-surface-600 hover:text-error transition-colors"
                     whileHover={{ scale: 1.1 }}
                     whileTap={{ scale: 0.9 }}

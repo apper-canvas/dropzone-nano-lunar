@@ -1,9 +1,10 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
-import ApperIcon from '../components/ApperIcon';
-import ActionButton from '../components/ActionButton';
+import ApperIcon from '@/components/ApperIcon';
+import ActionButton from '@/components/molecules/ActionButton';
 
-const NotFound = () => {
+const NotFoundPage = () => {
   const navigate = useNavigate();
 
   return (
@@ -37,4 +38,4 @@ const NotFound = () => {
   );
 };
 
-export default NotFound;
+export default NotFoundPage;

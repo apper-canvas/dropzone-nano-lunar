@@ -1,6 +1,6 @@
 import { useState, useRef } from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
 
 const DropZone = ({ onFilesAdded, disabled, config }) => {
   const [isDragging, setIsDragging] = useState(false);

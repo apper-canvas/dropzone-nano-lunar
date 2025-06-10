@@ -1,14 +1,15 @@
 import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { toast } from 'react-toastify';
-import DropZone from './DropZone';
-import FileCard from './FileCard';
-import ErrorMessage from './ErrorMessage';
-import ActionButton from './ActionButton';
-import ApperIcon from './ApperIcon';
-import { fileService, uploadConfigService } from '../services';
+import DropZone from '@/components/organisms/DropZone';
+import ErrorMessage from '@/components/molecules/ErrorMessage';
+import ApperIcon from '@/components/ApperIcon';
+import UploadOverview from '@/components/organisms/UploadOverview';
+import ActiveUploadsList from '@/components/organisms/ActiveUploadsList';
+import RecentUploadsList from '@/components/organisms/RecentUploadsList';
+import { fileService, uploadConfigService } from '@/services';
 
-const MainFeature = () => {
+const HomePage = () => {
   const [files, setFiles] = useState([]);
   const [uploadHistory, setUploadHistory] = useState([]);
   const [config, setConfig] = useState(null);
@@ -40,7 +41,6 @@ const MainFeature = () => {
       const history = await fileService.getUploadHistory();
       setUploadHistory(history);
       
-      // Calculate stats
       const stats = history.reduce((acc, file) => ({
         totalUploads: acc.totalUploads + 1,
         successfulUploads: acc.successfulUploads + (file.status === 'completed' ? 1 : 0),
@@ -226,25 +226,7 @@ const MainFeature = () => {
       </div>
 
       {/* Upload Stats */}
-      <motion.div 
-        className="grid grid-cols-1 md:grid-cols-3 gap-4"
-        initial={{ opacity: 0, y: 20 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.2 }}
-      >
-        <div className="bg-gradient-to-br from-primary/10 to-secondary/10 rounded-xl p-4 text-center border border-primary/20">
-          <div className="text-2xl font-bold text-primary">{uploadStats.totalUploads}</div>
-          <div className="text-sm text-surface-600">Total Uploads</div>
-        </div>
-        <div className="bg-gradient-to-br from-success/10 to-accent/10 rounded-xl p-4 text-center border border-success/20">
-          <div className="text-2xl font-bold text-success">{uploadStats.successfulUploads}</div>
-          <div className="text-sm text-surface-600">Successful</div>
-        </div>
-        <div className="bg-gradient-to-br from-info/10 to-primary/10 rounded-xl p-4 text-center border border-info/20">
-          <div className="text-2xl font-bold text-info">{formatFileSize(uploadStats.totalSize)}</div>
-          <div className="text-sm text-surface-600">Total Size</div>
-        </div>
-      </motion.div>
+      <UploadOverview uploadStats={uploadStats} formatFileSize={formatFileSize} />
 
       {/* Error Messages */}
       <AnimatePresence>
@@ -270,98 +252,19 @@ const MainFeature = () => {
       </motion.div>
 
       {/* Active Uploads */}
-      <AnimatePresence>
-        {files.length > 0 && (
-          <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="space-y-4"
-          >
-            <div className="flex items-center justify-between">
-              <h2 className="text-xl font-semibold text-surface-900">
-                Active Uploads ({files.length})
-              </h2>
-              
-              {files.some(f => f.status === 'completed') && (
-                <ActionButton
-                  icon="Trash2"
-                  label="Clear Completed"
-                  variant="ghost"
-                  size="sm"
-                  onClick={clearCompleted}
-                />
-              )}
-            </div>
-
-            <div className="space-y-3">
-              <AnimatePresence mode="popLayout">
-                {files.map(file => (
-                  <FileCard
-                    key={file.id}
-                    file={file}
-                    onPause={handlePauseUpload}
-                    onResume={handleResumeUpload}
-                    onCancel={handleCancelUpload}
-                    onRetry={handleRetryUpload}
-                  />
-                ))}
-              </AnimatePresence>
-            </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
+      {files.length > 0 && (
+        <ActiveUploadsList 
+          files={files}
+          onPause={handlePauseUpload}
+          onResume={handleResumeUpload}
+          onCancel={handleCancelUpload}
+          onRetry={handleRetryUpload}
+          clearCompleted={clearCompleted}
+        />
+      )}
 
       {/* Upload History */}
-      {uploadHistory.length > 0 && (
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4 }}
-          className="space-y-4"
-        >
-          <h2 className="text-xl font-semibold text-surface-900">
-            Recent Uploads
-          </h2>
-          
-          <div className="space-y-3">
-            {uploadHistory.slice(0, 5).map((file, index) => (
-              <motion.div
-                key={file.id}
-                initial={{ opacity: 0, x: -20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ delay: index * 0.1 }}
-                className="bg-white rounded-xl p-4 shadow-sm border border-surface-200"
-              >
-                <div className="flex items-center gap-3">
-                  <div className="flex-shrink-0">
-                    {file.preview ? (
-                      <img
-                        src={file.preview}
-                        alt={file.name}
-                        className="w-10 h-10 rounded-lg object-cover"
-                      />
-                    ) : (
-                      <div className="w-10 h-10 rounded-lg bg-success/10 flex items-center justify-center">
-                        <ApperIcon name="CheckCircle" className="w-5 h-5 text-success" />
-                      </div>
-                    )}
-                  </div>
-                  
-                  <div className="flex-1 min-w-0">
-                    <h4 className="font-medium text-surface-900 truncate">{file.name}</h4>
-                    <div className="flex items-center gap-2 text-sm text-surface-500">
-                      <span>{formatFileSize(file.size)}</span>
-                      <span>•</span>
-                      <span className="text-success">Completed</span>
-                    </div>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </motion.div>
-      )}
+      <RecentUploadsList uploadHistory={uploadHistory} formatFileSize={formatFileSize} />
 
       {/* Empty State */}
       {files.length === 0 && uploadHistory.length === 0 && (
@@ -385,4 +288,4 @@ const MainFeature = () => {
   );
 };
 
-export default MainFeature;
+export default HomePage;

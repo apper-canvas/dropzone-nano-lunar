@@ -1,5 +1,6 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
 
 const StatusIndicator = ({ status, size = 'sm' }) => {
   const getStatusConfig = () => {

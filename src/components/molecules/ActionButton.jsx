@@ -1,5 +1,7 @@
+import React from 'react';
 import { motion } from 'framer-motion';
-import ApperIcon from './ApperIcon';
+import ApperIcon from '@/components/ApperIcon';
+import Button from '@/components/atoms/Button';
 
 const ActionButton = ({ 
   icon, 
@@ -42,7 +44,7 @@ const ActionButton = ({
   };
 
   return (
-    <motion.button
+    <Button
       onClick={onClick}
       disabled={disabled || loading}
       className={`
@@ -67,7 +69,7 @@ const ActionButton = ({
       ) : null}
       
       {label && <span>{label}</span>}
-    </motion.button>
+    </Button>
   );
 };
 
