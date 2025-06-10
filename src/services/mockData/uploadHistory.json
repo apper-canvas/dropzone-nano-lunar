@@ -1,0 +1,35 @@
+[
+  {
+    "id": "1703123456789",
+    "name": "presentation.pdf",
+    "size": 2453760,
+    "type": "application/pdf",
+    "status": "completed",
+    "progress": 100,
+    "uploadSpeed": 1250000,
+    "preview": null,
+    "error": null
+  },
+  {
+    "id": "1703123456788",
+    "name": "vacation-photo.jpg",
+    "size": 4567890,
+    "type": "image/jpeg",
+    "status": "completed",
+    "progress": 100,
+    "uploadSpeed": 2100000,
+    "preview": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=150&h=150&fit=crop",
+    "error": null
+  },
+  {
+    "id": "1703123456787",
+    "name": "budget-spreadsheet.xlsx",
+    "size": 987654,
+    "type": "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+    "status": "completed",
+    "progress": 100,
+    "uploadSpeed": 890000,
+    "preview": null,
+    "error": null
+  }
+]
